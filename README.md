@@ -8,16 +8,16 @@ Extension Manifest V3 sederhana yang mengganti halaman tab baru di Google Chrome
 - Baris kedua mengambil situs yang sering dikunjungi dari API `topSites` browser, menampilkan favicon, judul, dan alamat situs.
 - Jam, tanggal, dan sapaan sesuai waktu setempat. Pencarian web tersedia di kolom pencarian pada area utama.
 - Widget cuaca menampilkan suhu, kondisi, serta suhu maksimum/minimum hari ini untuk kota pilihan.
-- Cuaca dan jadwal salat berhasil disimpan di `chrome.storage.local`, ditampilkan kembali saat offline, dan dicoba muat ulang setiap halaman tab baru dibuka. Ikon info menampilkan waktu terakhir data berhasil disimpan.
+- Cuaca dan jadwal Sholat berhasil disimpan di `chrome.storage.local`, ditampilkan kembali saat offline, dan dicoba muat ulang setiap halaman tab baru dibuka. Ikon info menampilkan waktu terakhir data berhasil disimpan.
 - Pencarian Google aktif kembali; tekan `/` untuk memfokuskan kolom pencarian.
-- Widget waktu salat menampilkan Subuh, Dzuhur, Asar, Maghrib, Isya, hitung mundur ke salat berikutnya, dan highlight waktu aktif menggunakan metode 20 Kementerian Agama melalui AlAdhan. Highlight Subuh berakhir saat Sunrise; setelah Sunrise sampai Dzuhur tidak ada waktu yang disorot.
+- Widget waktu Sholat menampilkan Subuh, Dzuhur, Asar, Maghrib, Isya, hitung mundur ke Sholat berikutnya, dan highlight waktu aktif menggunakan metode 20 Kementerian Agama melalui AlAdhan. Highlight Subuh berakhir saat Sunrise; setelah Sunrise sampai Dzuhur tidak ada waktu yang disorot.
 - Navigasi Home/Setting memakai tab mengambang; perpindahan halaman memiliki transisi halus dan tetap mendukung pengaturan reduced motion.
 - Pengaturan berada di halaman yang sama (SPA): buka **Setting**, cari kota, pilih hasilnya, atau hapus lokasi tersimpan.
 - Dari **Pengaturan**, unggah wallpaper JPG, PNG, atau WebP (maksimal 10 MB). Gambar diperkecil sebelum disimpan di browser; pratinjau dan tombol hapus tersedia untuk kembali ke latar bawaan.
 - Footer tetap menempel di bawah tampilan, dan kartu situs yang sering dikunjungi berukuran sama dengan kartu aplikasi.
 - Layout responsif dengan rak horizontal; gunakan tombol panah kiri/kanan pada kartu untuk berpindah.
 - Kartu situs menggunakan warna dominan favicon saat browser mengizinkan pembacaan warna; jika tidak, gunakan warna deterministik dari nama host.
-- Tidak membutuhkan build atau dependensi JavaScript. Pencarian kota dan cuaca memerlukan Open-Meteo; jadwal salat memerlukan AlAdhan.
+- Tidak membutuhkan build atau dependensi JavaScript. Pencarian kota dan cuaca memerlukan Open-Meteo; jadwal Sholat memerlukan AlAdhan.
 
 ## Instalasi di Chrome
 
@@ -37,7 +37,7 @@ Kedua browser menggunakan folder extension yang sama. Jika Momentum atau extensi
 
 ## Izin dan data
 
-Izin `topSites` digunakan untuk menampilkan shortcut situs yang sering dikunjungi, `favicon` untuk memuat ikon situs, dan `storage` untuk menyimpan kota pilihan serta wallpaper di browser lokal. Wallpaper tidak dikirim ke layanan cuaca. Extension meminta akses jaringan ke `geocoding-api.open-meteo.com` untuk pencarian kota, `api.open-meteo.com` untuk prakiraan cuaca, dan `api.aladhan.com` untuk jadwal salat metode 20 (Kementerian Agama Republik Indonesia). Koordinat serta tanggal lokal kota pilihan dikirim ke AlAdhan; nama kota yang dicari dan koordinat kota pilihan dikirim ke Open-Meteo. Lokasi perangkat dan riwayat browser tidak diakses. Pencarian web melalui kolom pencarian menggunakan Google. Widget cuaca dan salat menampilkan status bila lokasi belum dipilih atau data layanan tidak tersedia.
+Izin `topSites` digunakan untuk menampilkan shortcut situs yang sering dikunjungi, `favicon` untuk memuat ikon situs, dan `storage` untuk menyimpan kota pilihan serta wallpaper di browser lokal. Wallpaper tidak dikirim ke layanan cuaca. Extension meminta akses jaringan ke `geocoding-api.open-meteo.com` untuk pencarian kota, `api.open-meteo.com` untuk prakiraan cuaca, dan `api.aladhan.com` untuk jadwal Sholat metode 20 (Kementerian Agama Republik Indonesia). Koordinat serta tanggal lokal kota pilihan dikirim ke AlAdhan; nama kota yang dicari dan koordinat kota pilihan dikirim ke Open-Meteo. Lokasi perangkat dan riwayat browser tidak diakses. Pencarian web melalui kolom pencarian menggunakan Google. Widget cuaca dan Sholat menampilkan status bila lokasi belum dipilih atau data layanan tidak tersedia.
 
 ## Aset PNG aplikasi populer
 

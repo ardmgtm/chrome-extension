@@ -226,13 +226,14 @@ test('popular service PNG assets are bundled, including a transparent white Prim
   assert.match(css, /\.site-card \{ --site-accent:/);
   assert.match(css, /\.app-card\.spotify \{ --tile: #b9f3c4; \}/);
   assert.match(css, /\.app-card\.disney \{ --tile: #b9e7ff; \}/);
-  assert.match(css, /\.floating-tabs/);
-  assert.match(css, /\.floating-tabs \{ position: fixed; top:/);
+  assert.match(css, /\.page-tabs \{ position: static;/);
   assert.match(css, /\.page-footer \{ position: fixed; right: 0; bottom: 0; left: 0;/);
   assert.match(css, /\.app-visual/);
   assert.match(css, /\.site-visual/);
   assert.match(css, /::view-transition-new\(page-view\)/);
   const html = fs.readFileSync(path.join(root, 'newtab.html'), 'utf8');
+  assert.match(html, /<nav class="page-tabs"[\s\S]*?<header class="page-header">/);
+  assert.doesNotMatch(html, /class="floating-tabs"/);
   assert.match(html, /id="home-trigger"/);
   assert.match(html, /id="settings-trigger"/);
   assert.doesNotMatch(html, /PILIH APLIKASI FAVORITMU|DARI BROWSER ANDA|id="search-trigger"/);

@@ -218,7 +218,7 @@
     prayerSchedule = null;
     clearPrayerHighlight();
     document.getElementById('prayer-status').textContent = message;
-    document.getElementById('prayer-countdown-label').textContent = 'Salat berikutnya';
+    document.getElementById('prayer-countdown-label').textContent = 'Sholat berikutnya';
     document.getElementById('prayer-countdown-value').textContent = '--:--:--';
     document.querySelectorAll('.prayer-row time').forEach((time) => { time.textContent = '--:--'; });
   }
@@ -343,7 +343,7 @@
       .filter((prayer) => prayer.at > now)
       .sort((left, right) => left.at - right.at)[0];
     if (!upcoming) {
-      document.getElementById('prayer-countdown-label').textContent = 'Salat berikutnya';
+      document.getElementById('prayer-countdown-label').textContent = 'Sholat berikutnya';
       document.getElementById('prayer-countdown-value').textContent = '--:--:--';
       clearPrayerHighlight();
       return;
@@ -378,12 +378,12 @@
     if (prayerClockTimer !== null) window.clearInterval(prayerClockTimer);
     prayerClockTimer = null;
     if (!savedCity) {
-      resetPrayerWidget('Atur lokasi di Pengaturan untuk melihat waktu salat.');
+      resetPrayerWidget('Atur lokasi di Pengaturan untuk melihat waktu Sholat.');
       return;
     }
 
     const hadSchedule = Boolean(prayerSchedule);
-    if (!hadSchedule) document.getElementById('prayer-status').textContent = 'Memuat jadwal waktu salat...';
+    if (!hadSchedule) document.getElementById('prayer-status').textContent = 'Memuat jadwal waktu Sholat...';
     try {
       const requestDate = new Date();
       const timeZone = savedCity.timezone || Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -442,13 +442,13 @@
     } catch (error) {
       if (activeRequest !== prayerRequestId) return;
       const hasCachedSchedule = Boolean(prayerSchedule);
-      if (!hasCachedSchedule) resetPrayerWidget(`Jadwal salat tidak tersedia (${error.message}). Periksa koneksi lalu coba lagi.`);
+      if (!hasCachedSchedule) resetPrayerWidget(`Jadwal Sholat tidak tersedia (${error.message}). Periksa koneksi lalu coba lagi.`);
       const status = document.getElementById('prayer-status');
       if (hasCachedSchedule) {
         status.textContent = `Offline · jadwal tersimpan (${prayerSchedule[0].timeZone})`;
       } else {
         status.replaceChildren();
-        status.textContent = 'Jadwal salat tidak tersedia. ';
+        status.textContent = 'Jadwal Sholat tidak tersedia. ';
         const retry = document.createElement('button');
         retry.type = 'button';
         retry.className = 'prayer-retry';
@@ -832,7 +832,7 @@
       ++prayerRequestId;
       if (prayerClockTimer !== null) window.clearInterval(prayerClockTimer);
       prayerClockTimer = null;
-      resetPrayerWidget('Atur lokasi di Pengaturan untuk melihat waktu salat.');
+      resetPrayerWidget('Atur lokasi di Pengaturan untuk melihat waktu Sholat.');
       locationStatus.textContent = 'Lokasi dihapus.';
     });
   });
