@@ -1,4 +1,6 @@
-:root { color-scheme: dark; font-family: 'Segoe UI', Arial, sans-serif; color: #fff; background: #170c12; -webkit-font-smoothing: antialiased; }
+@font-face { font-family: 'Montserrat'; src: url('assets/fonts/montserrat/Montserrat-Regular.ttf') format('truetype'); font-style: normal; font-weight: 400; font-display: swap; }
+@font-face { font-family: 'Montserrat'; src: url('assets/fonts/montserrat/Montserrat-Bold.ttf') format('truetype'); font-style: normal; font-weight: 700; font-display: swap; }
+:root { color-scheme: dark; font-family: 'Montserrat', sans-serif; color: #fff; background: #170c12; -webkit-font-smoothing: antialiased; }
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
 html { scroll-behavior: smooth; }
@@ -116,10 +118,15 @@ h2 { margin: 0; font-size: clamp(23px, 2.15vw, 34px); line-height: 1.2; font-wei
 .settings-view { flex: 1; padding: 40px 0 70px; }
 .back-link { display: inline-block; margin-bottom: 24px; color: #f5cbd4; font-size: 14px; }
 .back-link:hover, .back-link:focus-visible { color: white; text-decoration: underline; }
-.settings-panel { width: min(680px,100%); padding: clamp(24px,4vw,48px); border: 1px solid rgba(255,255,255,.2); border-radius: 22px; background: rgba(27,22,32,.78); box-shadow: 0 24px 60px rgba(0,0,0,.2); }
+.settings-panel { width: 100%; max-width: 1120px; margin: 0 auto; padding: clamp(24px,4vw,48px); border: 1px solid rgba(255,255,255,.16); border-radius: 22px; background: rgba(27,22,32,.68); box-shadow: 0 24px 60px rgba(0,0,0,.18); backdrop-filter: blur(18px); }
+.settings-heading { margin-bottom: 32px; }
 .settings-eyebrow { margin: 0 0 12px; color: #f6aab7; font-size: 11px; font-weight: 700; letter-spacing: .2em; }
-.settings-panel h1 { font-size: clamp(36px,4vw,54px); }
-.settings-description { margin: 15px 0 32px; color: #e7cbd4; font-size: 15px; }
+.settings-heading h1 { margin: 0; font-size: clamp(32px,4vw,46px); letter-spacing: -.04em; }
+.settings-description { margin: 9px 0 0; color: #e7cbd4; font-size: 14px; }
+.settings-section { min-width: 0; }
+.settings-section-heading { margin-bottom: 22px; }
+.settings-section-heading h2 { margin: 0 0 7px; font-size: 20px; letter-spacing: -.02em; }
+.settings-section-heading p { margin: 0; color: #cbbdc8; font-size: 13px; line-height: 1.6; }
 .location-form label { display: block; margin-bottom: 11px; font-size: 14px; font-weight: 700; }
 .location-controls { display: flex; gap: 10px; }
 .location-controls input { flex: 1; min-width: 0; padding: 13px 16px; border: 1px solid rgba(255,255,255,.35); border-radius: 10px; outline: none; background: rgba(0,0,0,.24); color: white; }
@@ -154,9 +161,7 @@ h2 { margin: 0; font-size: clamp(23px, 2.15vw, 34px); line-height: 1.2; font-wei
 @media (max-width: 720px) { .floating-tabs { top: 18px; right: 20px; } .floating-tab { min-width: 98px; min-height: 42px; } .page-header { padding-right: 205px; } }
 @media (max-width: 430px) { .floating-tabs { top: 13px; right: 15px; gap: 2px; padding: 4px; } .floating-tab { min-width: 38px; min-height: 38px; padding: 0 10px; } .floating-tab span { display: none; } .page-header { padding-right: 100px; } }
 @media (max-width: 430px) { .settings-pill span { display: none; } .weather-heading { font-size: 12px; } .weather-condition { font-size: 23px; } .location-controls { flex-direction: column; } }
-.wallpaper-settings { margin-top: 32px; padding-top: 26px; border-top: 1px solid rgba(255,255,255,.19); }
-.wallpaper-settings h2 { margin: 0 0 10px; }
-.wallpaper-settings p { color: #e7cbd4; font-size: 13px; line-height: 1.5; }
+.wallpaper-settings { margin: 0; padding: 0; border: 0; }
 .wallpaper-settings label { display: block; margin: 19px 0 10px; font-size: 14px; font-weight: 700; }
 .wallpaper-settings input { width: 100%; max-width: 100%; font-size: 13px; }
 .wallpaper-settings input::file-selector-button { margin-right: 12px; padding: 10px 15px; border: 0; border-radius: 9px; color: #25213d; background: #e9e9ff; font: inherit; font-weight: 700; cursor: pointer; }
@@ -165,3 +170,7 @@ h2 { margin: 0; font-size: clamp(23px, 2.15vw, 34px); line-height: 1.2; font-wei
 .wallpaper-preview img { width: 160px; height: 90px; object-fit: cover; border: 1px solid rgba(255,255,255,.28); border-radius: 9px; }
 .wallpaper-preview button { padding: 10px 14px; border: 1px solid rgba(255,255,255,.35); border-radius: 9px; color: #fff; background: rgba(255,255,255,.12); cursor: pointer; }
 .wallpaper-preview button:hover, .wallpaper-preview button:focus-visible { background: rgba(255,255,255,.25); }
+.settings-panel { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); column-gap: clamp(28px,5vw,64px); row-gap: 0; }
+.settings-heading { grid-column: 1 / -1; }
+.wallpaper-settings { padding-left: clamp(24px,4vw,52px); border-left: 1px solid rgba(255,255,255,.14); }
+@media (max-width: 860px) { .settings-view { padding-top: 32px; } .settings-panel { grid-template-columns: 1fr; row-gap: 28px; } .settings-heading { grid-column: auto; margin-bottom: 0; } .wallpaper-settings { padding: 26px 0 0; border-top: 1px solid rgba(255,255,255,.14); border-left: 0; } }

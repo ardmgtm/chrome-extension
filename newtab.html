@@ -1,133 +1,342 @@
 <!doctype html>
 <html lang="id">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#170c12">
-  <title>New Tab</title>
-  <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-  <main class="page-shell">
-    <header class="page-header">
-      <div class="time-area" aria-label="Waktu dan tanggal">
-        <p class="greeting" id="greeting">SELAMAT DATANG</p>
-        <div class="time-line">
-          <time id="clock">--:--</time>
-          <span class="time-divider" aria-hidden="true"></span>
-          <span class="date" id="date">Memuat tanggal...</span>
-        </div>
-      </div>
-    </header>
-
-    <div id="home-view" class="view">
-    <section class="hero" aria-label="Pencarian, cuaca, dan waktu salat">
-      <div class="hero-copy">
-        <div class="weather-widget" aria-live="polite">
-          <div class="weather-heading"><span class="weather-accent" aria-hidden="true"></span> CUACA <span class="weather-separator">·</span> <span id="weather-city">PILIH LOKASI</span><span class="info-control"><button class="info-button" type="button" aria-label="Info pembaruan cuaca" aria-describedby="weather-last-updated">i</button><span class="info-popover" id="weather-last-updated" role="tooltip">Belum ada data cuaca yang berhasil dimuat.</span></span></div>
-          <div class="weather-main"><span class="weather-symbol" id="weather-symbol" aria-hidden="true">◌</span><span class="weather-temperature" id="weather-temperature">--°</span><span class="weather-condition" id="weather-condition">Atur kota untuk melihat cuaca</span></div>
-          <div class="weather-details" id="weather-details" hidden><span>HARI INI <strong id="weather-high">--°</strong> / <strong id="weather-low">--°</strong></span><span id="weather-updated"></span></div>
-          <p class="weather-message" id="weather-message"><a href="#settings">Pilih lokasi di Pengaturan →</a></p>
-        </div>
-        <form class="search" id="search-form" role="search">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg>
-          <input id="search-input" type="search" placeholder="Cari sesuatu di web..." aria-label="Cari di web" autocomplete="off">
-          <button class="search-submit" id="search-submit" type="submit" aria-label="Cari di Google">Cari</button>
-          <kbd>/</kbd>
-        </form>
-      </div>
-      <section class="prayer-widget" aria-labelledby="prayer-heading" aria-live="polite">
-        <div class="prayer-heading-row">
-          <div>
-            <p class="prayer-eyebrow">JADWAL HARI INI</p>
-            <div class="prayer-title-line"><h2 id="prayer-heading">Waktu salat</h2><span class="info-control"><button class="info-button" type="button" aria-label="Info pembaruan waktu salat" aria-describedby="prayer-last-updated">i</button><span class="info-popover" id="prayer-last-updated" role="tooltip">Belum ada jadwal salat yang berhasil dimuat.</span></span></div>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#170c12" />
+    <title>New Tab</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="page-shell">
+      <header class="page-header">
+        <div class="time-area" aria-label="Waktu dan tanggal">
+          <p class="greeting" id="greeting">SELAMAT DATANG</p>
+          <div class="time-line">
+            <time id="clock">--:--</time>
+            <span class="time-divider" aria-hidden="true"></span>
+            <span class="date" id="date">Memuat tanggal...</span>
           </div>
-          <span class="prayer-location" id="prayer-location">Pilih lokasi</span>
         </div>
-        <p class="prayer-status" id="prayer-status">Atur lokasi di Pengaturan untuk melihat waktu salat.</p>
-        <ol class="prayer-list" id="prayer-list" aria-label="Lima waktu salat">
-          <li class="prayer-row" data-prayer="Fajr"><span>Subuh</span><time>--:--</time></li>
-          <li class="prayer-row" data-prayer="Dhuhr"><span>Dzuhur</span><time>--:--</time></li>
-          <li class="prayer-row" data-prayer="Asr"><span>Asar</span><time>--:--</time></li>
-          <li class="prayer-row" data-prayer="Maghrib"><span>Maghrib</span><time>--:--</time></li>
-          <li class="prayer-row" data-prayer="Isha"><span>Isya</span><time>--:--</time></li>
-        </ol>
-        <div class="prayer-countdown" id="prayer-countdown" aria-live="off">
-          <span id="prayer-countdown-label">Salat berikutnya</span>
-          <strong id="prayer-countdown-value">--:--:--</strong>
+      </header>
+
+      <div id="home-view" class="view">
+        <section class="hero" aria-label="Pencarian, cuaca, dan waktu salat">
+          <div class="hero-copy">
+            <div class="weather-widget" aria-live="polite">
+              <div class="weather-heading">
+                <span class="weather-accent" aria-hidden="true"></span> CUACA
+                <span class="weather-separator">·</span>
+                <span id="weather-city">PILIH LOKASI</span
+                ><span class="info-control"
+                  ><button
+                    class="info-button"
+                    type="button"
+                    aria-label="Info pembaruan cuaca"
+                    aria-describedby="weather-last-updated"
+                  >
+                    i</button
+                  ><span
+                    class="info-popover"
+                    id="weather-last-updated"
+                    role="tooltip"
+                    >Belum ada data cuaca yang berhasil dimuat.</span
+                  ></span
+                >
+              </div>
+              <div class="weather-main">
+                <span
+                  class="weather-symbol"
+                  id="weather-symbol"
+                  aria-hidden="true"
+                  >◌</span
+                ><span class="weather-temperature" id="weather-temperature"
+                  >--°</span
+                ><span class="weather-condition" id="weather-condition"
+                  >Atur kota untuk melihat cuaca</span
+                >
+              </div>
+              <div class="weather-details" id="weather-details" hidden>
+                <span
+                  >HARI INI <strong id="weather-high">--°</strong> /
+                  <strong id="weather-low">--°</strong></span
+                ><span id="weather-updated"></span>
+              </div>
+              <p class="weather-message" id="weather-message">
+                <a href="#settings">Pilih lokasi di Pengaturan →</a>
+              </p>
+            </div>
+            <form class="search" id="search-form" role="search">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="10.5" cy="10.5" r="6.5" />
+                <path d="m15.5 15.5 5 5" />
+              </svg>
+              <input
+                id="search-input"
+                type="search"
+                placeholder="Cari sesuatu di web..."
+                aria-label="Cari di web"
+                autocomplete="off"
+              />
+              <button
+                class="search-submit"
+                id="search-submit"
+                type="submit"
+                aria-label="Cari di Google"
+              >
+                Cari
+              </button>
+              <kbd>/</kbd>
+            </form>
+          </div>
+          <section
+            class="prayer-widget"
+            aria-labelledby="prayer-heading"
+            aria-live="polite"
+          >
+            <div class="prayer-heading-row">
+              <div>
+                <p class="prayer-eyebrow">JADWAL HARI INI</p>
+                <div class="prayer-title-line">
+                  <h2 id="prayer-heading">Waktu salat</h2>
+                  <span class="info-control"
+                    ><button
+                      class="info-button"
+                      type="button"
+                      aria-label="Info pembaruan waktu salat"
+                      aria-describedby="prayer-last-updated"
+                    >
+                      i</button
+                    ><span
+                      class="info-popover"
+                      id="prayer-last-updated"
+                      role="tooltip"
+                      >Belum ada jadwal salat yang berhasil dimuat.</span
+                    ></span
+                  >
+                </div>
+              </div>
+              <span class="prayer-location" id="prayer-location"
+                >Pilih lokasi</span
+              >
+            </div>
+            <p class="prayer-status" id="prayer-status">
+              Atur lokasi di Pengaturan untuk melihat waktu salat.
+            </p>
+            <ol
+              class="prayer-list"
+              id="prayer-list"
+              aria-label="Lima waktu salat"
+            >
+              <li class="prayer-row" data-prayer="Fajr">
+                <span>Subuh</span><time>--:--</time>
+              </li>
+              <li class="prayer-row" data-prayer="Dhuhr">
+                <span>Dzuhur</span><time>--:--</time>
+              </li>
+              <li class="prayer-row" data-prayer="Asr">
+                <span>Asar</span><time>--:--</time>
+              </li>
+              <li class="prayer-row" data-prayer="Maghrib">
+                <span>Maghrib</span><time>--:--</time>
+              </li>
+              <li class="prayer-row" data-prayer="Isha">
+                <span>Isya</span><time>--:--</time>
+              </li>
+            </ol>
+            <div class="prayer-countdown" id="prayer-countdown" aria-live="off">
+              <span id="prayer-countdown-label">Salat berikutnya</span>
+              <strong id="prayer-countdown-value">--:--:--</strong>
+            </div>
+            <p class="prayer-source">
+              Metode Kemenag ·
+              <a
+                href="https://aladhan.com/prayer-times-api"
+                target="_blank"
+                rel="noopener noreferrer"
+                >AlAdhan</a
+              >
+            </p>
+          </section>
+        </section>
+
+        <section class="shelf" aria-labelledby="apps-heading">
+          <div class="shelf-header">
+            <h2 id="apps-heading">Website populer</h2>
+          </div>
+          <div class="shelf-track app-grid" id="app-grid"></div>
+        </section>
+
+        <section class="shelf sites-shelf" aria-labelledby="sites-heading">
+          <div class="shelf-header">
+            <h2 id="sites-heading">Paling sering dikunjungi</h2>
+          </div>
+          <div
+            class="shelf-track site-grid"
+            id="site-grid"
+            aria-live="polite"
+          ></div>
+        </section>
+      </div>
+
+      <section
+        class="settings-view view"
+        id="settings-view"
+        aria-labelledby="settings-title"
+        hidden
+      >
+        <div class="settings-panel">
+          <header class="settings-heading">
+            <p class="settings-eyebrow">PERSONALISASI</p>
+            <h1 id="settings-title">Pengaturan</h1>
+            <p class="settings-description">
+              Atur lokasi cuaca dan tampilan tab baru Anda.
+            </p>
+          </header>
+          <section
+            class="settings-section location-settings"
+            aria-labelledby="location-settings-title"
+          >
+            <div class="settings-section-heading">
+              <h2 id="location-settings-title">Lokasi</h2>
+              <p>Pilih kota untuk menampilkan cuaca dan waktu salat.</p>
+            </div>
+            <form id="location-form" class="location-form" role="search">
+              <label for="location-input">Cari kota</label>
+              <div class="location-controls">
+                <input
+                  id="location-input"
+                  type="search"
+                  placeholder="Contoh: Yogyakarta"
+                  minlength="2"
+                  autocomplete="off"
+                  required
+                />
+                <button type="submit" id="location-search">Cari lokasi</button>
+              </div>
+            </form>
+            <p
+              class="location-status"
+              id="location-status"
+              role="status"
+              aria-live="polite"
+            >
+              Ketik nama kota lalu pilih salah satu hasil.
+            </p>
+            <div
+              class="location-results"
+              id="location-results"
+              aria-label="Hasil pencarian kota"
+            ></div>
+            <div class="current-location" id="current-location" hidden>
+              <span>LOKASI TERSIMPAN</span>
+              <strong id="saved-location"></strong>
+              <button type="button" id="clear-location">Hapus lokasi</button>
+            </div>
+            <p class="settings-note">
+              Pencarian kota dan data cuaca disediakan oleh
+              <a
+                href="https://open-meteo.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                >Open-Meteo</a
+              >. Nama kota yang dicari dan koordinat kota terpilih dikirim ke
+              layanan tersebut; lokasi perangkat Anda tidak diakses.
+            </p>
+          </section>
+          <section
+            class="settings-section wallpaper-settings"
+            aria-labelledby="wallpaper-title"
+          >
+            <div class="settings-section-heading">
+              <h2 id="wallpaper-title">Wallpaper</h2>
+              <p>
+                Unggah gambar untuk latar tab baru. Gambar disimpan hanya di
+                browser ini.
+              </p>
+            </div>
+            <label for="wallpaper-input"
+              >Pilih gambar (JPG, PNG, WebP; maks. 10 MB)</label
+            >
+            <input
+              id="wallpaper-input"
+              type="file"
+              accept="image/jpeg,image/png,image/webp"
+            />
+            <p
+              class="wallpaper-status"
+              id="wallpaper-status"
+              role="status"
+              aria-live="polite"
+            >
+              Menggunakan latar bawaan.
+            </p>
+            <div class="wallpaper-preview" id="wallpaper-preview" hidden>
+              <img
+                id="wallpaper-preview-image"
+                alt="Pratinjau wallpaper pilihan"
+              />
+              <button type="button" id="clear-wallpaper">
+                Hapus wallpaper
+              </button>
+            </div>
+          </section>
         </div>
-        <p class="prayer-source">Metode Kemenag · <a href="https://aladhan.com/prayer-times-api" target="_blank" rel="noopener noreferrer">AlAdhan</a></p>
       </section>
-    </section>
 
-    <section class="shelf" aria-labelledby="apps-heading">
-      <div class="shelf-header">
-        <h2 id="apps-heading">Website populer</h2>
-      </div>
-      <div class="shelf-track app-grid" id="app-grid"></div>
-    </section>
+      <footer class="page-footer">
+        <span class="keyboard-hint"
+          ><kbd>←</kbd><kbd>→</kbd> pindah <span class="footer-sep">·</span>
+          <kbd>Tab</kbd> navigasi</span
+        >
+      </footer>
 
-    <section class="shelf sites-shelf" aria-labelledby="sites-heading">
-      <div class="shelf-header">
-        <h2 id="sites-heading">Paling sering dikunjungi</h2>
-      </div>
-      <div class="shelf-track site-grid" id="site-grid" aria-live="polite"></div>
-    </section>
-    </div>
+      <nav class="floating-tabs" aria-label="Navigasi utama">
+        <a
+          class="floating-tab"
+          href="#home"
+          id="home-trigger"
+          aria-label="Home"
+          aria-current="page"
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path
+              d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"
+            />
+          </svg>
+          <span>Home</span>
+        </a>
+        <a
+          class="floating-tab"
+          href="#settings"
+          id="settings-trigger"
+          aria-label="Setting"
+          aria-current="false"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="size-6"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M10.343 3.94c.09-.542.56-.94 1.11-.94h1.093c.55 0 1.02.398 1.11.94l.149.894c.07.424.384.764.78.93.398.164.855.142 1.205-.108l.737-.527a1.125 1.125 0 0 1 1.45.12l.773.774c.39.389.44 1.002.12 1.45l-.527.737c-.25.35-.272.806-.107 1.204.165.397.505.71.93.78l.893.15c.543.09.94.559.94 1.109v1.094c0 .55-.397 1.02-.94 1.11l-.894.149c-.424.07-.764.383-.929.78-.165.398-.143.854.107 1.204l.527.738c.32.447.269 1.06-.12 1.45l-.774.773a1.125 1.125 0 0 1-1.449.12l-.738-.527c-.35-.25-.806-.272-1.203-.107-.398.165-.71.505-.781.929l-.149.894c-.09.542-.56.94-1.11.94h-1.094c-.55 0-1.019-.398-1.11-.94l-.148-.894c-.071-.424-.384-.764-.781-.93-.398-.164-.854-.142-1.204.108l-.738.527c-.447.32-1.06.269-1.45-.12l-.773-.774a1.125 1.125 0 0 1-.12-1.45l.527-.737c.25-.35.272-.806.108-1.204-.165-.397-.506-.71-.93-.78l-.894-.15c-.542-.09-.94-.56-.94-1.109v-1.094c0-.55.398-1.02.94-1.11l.894-.149c.424-.07.765-.383.93-.78.165-.398.143-.854-.108-1.204l-.526-.738a1.125 1.125 0 0 1 .12-1.45l.773-.773a1.125 1.125 0 0 1 1.45-.12l.737.527c.35.25.807.272 1.204.107.397-.165.71-.505.78-.929l.15-.894Z"
+            />
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+            />
+          </svg>
 
-    <section class="settings-view view" id="settings-view" aria-labelledby="settings-title" hidden>
-      <div class="settings-panel">
-        <p class="settings-eyebrow">PERSONALISASI</p>
-        <h1 id="settings-title">Pengaturan</h1>
-        <p class="settings-description">Pilih kota untuk menampilkan cuaca di halaman tab baru.</p>
-        <form id="location-form" class="location-form" role="search">
-          <label for="location-input">Cari kota</label>
-          <div class="location-controls">
-            <input id="location-input" type="search" placeholder="Contoh: Yogyakarta" minlength="2" autocomplete="off" required>
-            <button type="submit" id="location-search">Cari lokasi</button>
-          </div>
-        </form>
-        <p class="location-status" id="location-status" role="status" aria-live="polite">Ketik nama kota lalu pilih salah satu hasil.</p>
-        <div class="location-results" id="location-results" aria-label="Hasil pencarian kota"></div>
-        <div class="current-location" id="current-location" hidden>
-          <span>LOKASI TERSIMPAN</span>
-          <strong id="saved-location"></strong>
-          <button type="button" id="clear-location">Hapus lokasi</button>
-        </div>
-        <p class="settings-note">Pencarian kota dan data cuaca disediakan oleh <a href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer">Open-Meteo</a>. Nama kota yang dicari dan koordinat kota terpilih dikirim ke layanan tersebut; lokasi perangkat Anda tidak diakses.</p>
-        <div class="wallpaper-settings">
-          <h2>Wallpaper</h2>
-          <p>Unggah gambar untuk latar halaman tab baru. Gambar disimpan hanya di browser ini.</p>
-          <label for="wallpaper-input">Pilih gambar (JPG, PNG, WebP; maks. 10 MB)</label>
-          <input id="wallpaper-input" type="file" accept="image/jpeg,image/png,image/webp">
-          <p class="wallpaper-status" id="wallpaper-status" role="status" aria-live="polite">Menggunakan latar bawaan.</p>
-          <div class="wallpaper-preview" id="wallpaper-preview" hidden>
-            <img id="wallpaper-preview-image" alt="Pratinjau wallpaper pilihan">
-            <button type="button" id="clear-wallpaper">Hapus wallpaper</button>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <footer class="page-footer">
-      <span class="keyboard-hint"><kbd>←</kbd><kbd>→</kbd> pindah <span class="footer-sep">·</span> <kbd>Tab</kbd> navigasi</span>
-    </footer>
-
-    <nav class="floating-tabs" aria-label="Navigasi utama">
-      <a class="floating-tab" href="#home" id="home-trigger" aria-label="Home" aria-current="page">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/></svg>
-        <span>Home</span>
-      </a>
-      <a class="floating-tab" href="#settings" id="settings-trigger" aria-label="Setting" aria-current="false">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-  <path stroke-linecap="round" stroke-linejoin="round" d="M10.343 3.94c.09-.542.56-.94 1.11-.94h1.093c.55 0 1.02.398 1.11.94l.149.894c.07.424.384.764.78.93.398.164.855.142 1.205-.108l.737-.527a1.125 1.125 0 0 1 1.45.12l.773.774c.39.389.44 1.002.12 1.45l-.527.737c-.25.35-.272.806-.107 1.204.165.397.505.71.93.78l.893.15c.543.09.94.559.94 1.109v1.094c0 .55-.397 1.02-.94 1.11l-.894.149c-.424.07-.764.383-.929.78-.165.398-.143.854.107 1.204l.527.738c.32.447.269 1.06-.12 1.45l-.774.773a1.125 1.125 0 0 1-1.449.12l-.738-.527c-.35-.25-.806-.272-1.203-.107-.398.165-.71.505-.781.929l-.149.894c-.09.542-.56.94-1.11.94h-1.094c-.55 0-1.019-.398-1.11-.94l-.148-.894c-.071-.424-.384-.764-.781-.93-.398-.164-.854-.142-1.204.108l-.738.527c-.447.32-1.06.269-1.45-.12l-.773-.774a1.125 1.125 0 0 1-.12-1.45l.527-.737c.25-.35.272-.806.108-1.204-.165-.397-.506-.71-.93-.78l-.894-.15c-.542-.09-.94-.56-.94-1.109v-1.094c0-.55.398-1.02.94-1.11l.894-.149c.424-.07.765-.383.93-.78.165-.398.143-.854-.108-1.204l-.526-.738a1.125 1.125 0 0 1 .12-1.45l.773-.773a1.125 1.125 0 0 1 1.45-.12l.737.527c.35.25.807.272 1.204.107.397-.165.71-.505.78-.929l.15-.894Z" />
-  <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-</svg>
-
-        <span>Setting</span>
-      </a>
-    </nav>
-  </main>
-  <script src="newtab.js"></script>
-</body>
+          <span>Setting</span>
+        </a>
+      </nav>
+    </main>
+    <script src="newtab.js"></script>
+  </body>
 </html>
