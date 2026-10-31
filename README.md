@@ -11,6 +11,8 @@ Extension Manifest V3 sederhana yang mengganti halaman tab baru di Google Chrome
 - Cuaca dan jadwal Sholat berhasil disimpan di `chrome.storage.local`, ditampilkan kembali saat offline, dan dicoba muat ulang setiap halaman tab baru dibuka. Ikon info menampilkan waktu terakhir data berhasil disimpan.
 - Pencarian Google aktif kembali; tekan `/` untuk memfokuskan kolom pencarian.
 - Widget waktu Sholat menampilkan Subuh, Dzuhur, Asar, Maghrib, Isya, hitung mundur ke Sholat berikutnya, dan highlight waktu aktif menggunakan metode 20 Kementerian Agama melalui AlAdhan. Highlight Subuh berakhir saat Sunrise; setelah Sunrise sampai Dzuhur tidak ada waktu yang disorot.
+- Widget Sholat dan Todo List adalah carousel manual tanpa pergantian otomatis. Todo dapat ditambah, diedit, ditandai selesai, dan dihapus; daftar disimpan di `chrome.storage.local`.
+- Kedua card carousel memiliki tinggi yang sama dan berpindah dengan animasi geser; animasi dinonaktifkan saat preferensi sistem mengurangi gerakan aktif.
 - Navigasi Home/Setting memakai tab mengambang; perpindahan halaman memiliki transisi halus dan tetap mendukung pengaturan reduced motion.
 - Pengaturan berada di halaman yang sama (SPA): buka **Setting**, cari kota, pilih hasilnya, atau hapus lokasi tersimpan.
 - Dari **Pengaturan**, unggah wallpaper JPG, PNG, atau WebP (maksimal 10 MB). Gambar diperkecil sebelum disimpan di browser; pratinjau dan tombol hapus tersedia untuk kembali ke latar bawaan.

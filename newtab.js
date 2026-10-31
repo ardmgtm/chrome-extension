@@ -29,6 +29,141 @@
   const prayerOrder = ['Fajr', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'];
   const WEATHER_CACHE_KEY = 'weatherCache';
   const PRAYER_CACHE_KEY = 'prayerCache';
+  const TODO_KEY = 'todoItems';
+  let todoItems = [];
+  let todoLoaded = false;
+  let todoWrite = Promise.resolve();
+  let todoSequence = 0;
+  let widgetIndex = 0;
+
+  function showWidget(index) {
+    widgetIndex = (index + 2) % 2;
+    const prayer = document.querySelector('.prayer-widget');
+    const todo = document.getElementById('todo-widget');
+    const showingTodo = widgetIndex === 1;
+    if (showingTodo) document.getElementById('widget-carousel-track').classList.add('is-todo');
+    else document.getElementById('widget-carousel-track').classList.remove('is-todo');
+    prayer.inert = showingTodo;
+    todo.inert = !showingTodo;
+    prayer.setAttribute('aria-hidden', String(showingTodo));
+    todo.setAttribute('aria-hidden', String(!showingTodo));
+    document.getElementById('widget-position').textContent = widgetIndex === 0 ? '1 / 2 · Sholat' : '2 / 2 · Todo';
+  }
+
+  function validTodo(item) {
+    return item && typeof item.id === 'string' && typeof item.text === 'string' &&
+      item.text.trim().length > 0 && item.text.length <= 200 && typeof item.done === 'boolean';
+  }
+
+  function loadTodo() {
+    chrome.storage.local.get(TODO_KEY, (items) => {
+      if (chrome.runtime.lastError) {
+        document.getElementById('todo-status').textContent = 'Tugas gagal dimuat. Buka ulang tab untuk mencoba lagi.';
+        return;
+      }
+      todoLoaded = true;
+      todoItems = Array.isArray(items[TODO_KEY]) ? items[TODO_KEY].filter(validTodo) : [];
+      renderTodo();
+    });
+  }
+
+  function saveTodo() {
+    const snapshot = todoItems.map((item) => ({ ...item }));
+    todoWrite = todoWrite.catch(() => {}).then(() => new Promise((resolve, reject) => {
+      chrome.storage.local.set({ [TODO_KEY]: snapshot }, () => {
+        if (chrome.runtime.lastError) reject(new Error('Tugas gagal disimpan. Coba ubah tugas lagi.'));
+        else resolve();
+      });
+    }));
+    todoWrite.then(() => { document.getElementById('todo-status').textContent = ''; }, (error) => {
+      document.getElementById('todo-status').textContent = error.message;
+    });
+  }
+
+  function changeTodo(next) {
+    todoItems = next;
+    renderTodo();
+    saveTodo();
+  }
+
+  function todoActionIcon(kind) {
+    const namespace = 'http://www.w3.org/2000/svg';
+    const icon = document.createElementNS(namespace, 'svg');
+    icon.setAttribute('viewBox', '0 0 24 24');
+    icon.setAttribute('fill', 'none');
+    icon.setAttribute('stroke', 'currentColor');
+    icon.setAttribute('stroke-width', '1.8');
+    icon.setAttribute('stroke-linecap', 'round');
+    icon.setAttribute('stroke-linejoin', 'round');
+    icon.setAttribute('aria-hidden', 'true');
+    const path = document.createElementNS(namespace, 'path');
+    path.setAttribute('d', kind === 'edit'
+      ? 'M12 20h9M16.5 3.5a2.12 2.12 0 0 1 3 3L9 17l-4 1 1-4L16.5 3.5Z'
+      : 'M3 6h18M8 6V4h8v2m3 0-1 14H6L5 6m5 4v7m4-7v7');
+    icon.append(path);
+    return icon;
+  }
+
+  function renderTodo() {
+    const list = document.getElementById('todo-list');
+    list.replaceChildren();
+    document.getElementById('todo-empty').hidden = todoItems.length > 0;
+    document.getElementById('todo-count').textContent = `${todoItems.filter((item) => item.done).length}/${todoItems.length} selesai`;
+    for (const item of todoItems) {
+      const row = document.createElement('li');
+      row.className = 'todo-item';
+      if (item.done) row.classList.add('is-done');
+      const checkbox = document.createElement('input');
+      checkbox.type = 'checkbox';
+      checkbox.checked = item.done;
+      checkbox.setAttribute('aria-label', `Tandai ${item.text} ${item.done ? 'belum selesai' : 'selesai'}`);
+      checkbox.addEventListener('change', () => {
+        changeTodo(todoItems.map((task) => task.id === item.id ? { ...task, done: checkbox.checked } : task));
+      });
+      const label = document.createElement('span');
+      label.className = 'todo-text';
+      label.textContent = item.text;
+      const edit = document.createElement('button');
+      edit.type = 'button';
+      edit.className = 'todo-action';
+      edit.setAttribute('aria-label', `Edit ${item.text}`);
+      edit.append(todoActionIcon('edit'));
+      edit.addEventListener('click', () => {
+        const form = document.createElement('form');
+        form.className = 'todo-edit-form';
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.value = item.text;
+        input.maxLength = 200;
+        input.required = true;
+        input.setAttribute('aria-label', 'Edit tugas');
+        const save = document.createElement('button');
+        save.type = 'submit';
+        save.textContent = 'Simpan';
+        const cancel = document.createElement('button');
+        cancel.type = 'button';
+        cancel.textContent = 'Batal';
+        cancel.addEventListener('click', renderTodo);
+        form.addEventListener('submit', (event) => {
+          event.preventDefault();
+          const text = input.value.trim();
+          if (!text || text.length > 200) return;
+          changeTodo(todoItems.map((task) => task.id === item.id ? { ...task, text } : task));
+        });
+        form.append(input, save, cancel);
+        row.replaceChildren(form);
+        input.focus();
+      });
+      const remove = document.createElement('button');
+      remove.type = 'button';
+      remove.className = 'todo-action todo-action-delete';
+      remove.setAttribute('aria-label', `Hapus ${item.text}`);
+      remove.append(todoActionIcon('delete'));
+      remove.addEventListener('click', () => changeTodo(todoItems.filter((task) => task.id !== item.id)));
+      row.append(checkbox, label, edit, remove);
+      list.append(row);
+    }
+  }
 
   function formatLastUpdated(timestamp) {
     if (!Number.isFinite(timestamp)) return 'Belum ada data berhasil dimuat.';
@@ -814,6 +949,18 @@
   });
 
   document.getElementById('location-form').addEventListener('submit', searchCity);
+  document.getElementById('widget-prev').addEventListener('click', () => showWidget(widgetIndex - 1));
+  document.getElementById('widget-next').addEventListener('click', () => showWidget(widgetIndex + 1));
+  document.getElementById('todo-form').addEventListener('submit', (event) => {
+    event.preventDefault();
+    if (!todoLoaded) return;
+    const input = document.getElementById('todo-input');
+    const text = input.value.trim();
+    if (!text || text.length > 200) return;
+    changeTodo([...todoItems, { id: `${Date.now()}-${++todoSequence}`, text, done: false }]);
+    input.value = '';
+    input.focus();
+  });
   document.getElementById('wallpaper-input').addEventListener('change', uploadWallpaper);
   document.getElementById('clear-wallpaper').addEventListener('click', clearWallpaper);
   document.getElementById('clear-location').addEventListener('click', () => {
@@ -860,6 +1007,7 @@
   });
 
   renderApps();
+  loadTodo();
   showView();
   loadSavedCity();
   loadWallpaper();

@@ -65,7 +65,7 @@
       </header>
 
       <div id="home-view" class="view">
-        <section class="hero" aria-label="Pencarian, cuaca, dan waktu Sholat">
+        <section class="hero" aria-label="Pencarian, cuaca, waktu Sholat, dan todo">
           <div class="hero-copy">
             <div class="weather-widget" aria-live="polite">
               <div class="weather-heading">
@@ -133,10 +133,14 @@
               <kbd>/</kbd>
             </form>
           </div>
+          <div class="widget-carousel" aria-label="Widget jadwal Sholat dan todo" aria-roledescription="carousel">
+          <div class="widget-carousel-viewport">
+          <div class="widget-carousel-track" id="widget-carousel-track">
           <section
             class="prayer-widget"
             aria-labelledby="prayer-heading"
             aria-live="polite"
+            aria-roledescription="slide"
           >
             <div class="prayer-heading-row">
               <div>
@@ -202,6 +206,29 @@
               >
             </p>
           </section>
+          <section class="todo-widget" id="todo-widget" aria-labelledby="todo-heading" aria-roledescription="slide" aria-hidden="true" inert>
+            <p class="prayer-eyebrow">RENCANA HARI INI</p>
+            <div class="todo-heading-row">
+              <h2 id="todo-heading">Todo List</h2>
+              <span id="todo-count">0 tugas</span>
+            </div>
+            <form id="todo-form" class="todo-form">
+              <label for="todo-input" class="visually-hidden">Tugas baru</label>
+              <input id="todo-input" type="text" maxlength="200" placeholder="Tulis tugas baru..." required />
+              <button type="submit">Tambah</button>
+            </form>
+            <p id="todo-status" class="todo-status" role="status" aria-live="polite"></p>
+            <ul id="todo-list" class="todo-list" aria-label="Daftar tugas"></ul>
+            <p id="todo-empty" class="todo-empty">Belum ada tugas. Tambahkan tugas pertamamu!</p>
+          </section>
+          </div>
+          </div>
+          <div class="widget-carousel-controls" aria-label="Navigasi widget">
+            <button type="button" id="widget-prev" aria-label="Widget sebelumnya">←</button>
+            <span id="widget-position" aria-live="polite">1 / 2 · Sholat</span>
+            <button type="button" id="widget-next" aria-label="Widget berikutnya">→</button>
+          </div>
+          </div>
         </section>
 
         <section class="shelf" aria-labelledby="apps-heading">

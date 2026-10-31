@@ -6,6 +6,16 @@ const vm = require('node:vm');
 
 const source = fs.readFileSync(path.join(__dirname, 'newtab.js'), 'utf8');
 
+test('widget carousel keeps both cards in one equal-height sliding grid and respects reduced motion', () => {
+  const html = fs.readFileSync(path.join(__dirname, 'newtab.html'), 'utf8');
+  const css = fs.readFileSync(path.join(__dirname, 'styles.css'), 'utf8');
+  assert.match(html, /class="widget-carousel-track"[^>]*>[\s\S]*?class="prayer-widget"[\s\S]*?class="todo-widget"/);
+  assert.match(css, /\.widget-carousel-track\s*\{[^}]*display:\s*grid;[^}]*width:\s*200%;[^}]*grid-template-columns:\s*repeat\(2,\s*minmax\(0,\s*1fr\)\);[^}]*align-items:\s*stretch;[^}]*transition:\s*transform/);
+  assert.match(css, /\.widget-carousel-track\.is-todo\s*\{\s*transform:\s*translateX\(-50%\);/);
+  assert.match(css, /\.widget-carousel \.prayer-widget, \.widget-carousel \.todo-widget\s*\{[^}]*height:\s*100%;/);
+  assert.match(css, /prefers-reduced-motion:\s*reduce\)\s*\{\s*\.widget-carousel-track\s*\{\s*transition:\s*none;/);
+});
+
 class Element {
   constructor(tag = 'div') {
     this.tagName = tag.toUpperCase();
@@ -30,7 +40,7 @@ class Element {
   }
 }
 
-function setup({ savedCity = null, savedWallpaper = null, savedWeatherCache = null, savedPrayerCache = null, fetchImpl = async () => ({ ok: false }), bitmapImpl, faviconPixels, clock = { now: Date.now() } } = {}) {
+function setup({ savedCity = null, savedWallpaper = null, savedWeatherCache = null, savedPrayerCache = null, savedTodo = null, fetchImpl = async () => ({ ok: false }), bitmapImpl, faviconPixels, clock = { now: Date.now() } } = {}) {
   const ids = {};
   for (const id of ['app-grid', 'site-grid', 'location-input', 'location-results', 'location-status', 'home-view', 'settings-view', 'home-trigger', 'settings-trigger', 'current-location', 'saved-location', 'weather-city', 'weather-message', 'weather-details', 'weather-temperature', 'weather-condition', 'weather-symbol', 'weather-high', 'weather-low', 'weather-updated', 'weather-last-updated', 'prayer-status', 'prayer-location', 'prayer-last-updated', 'prayer-list', 'prayer-countdown-label', 'prayer-countdown-value', 'location-search', 'search-form', 'search-trigger', 'search-input', 'location-form', 'clear-location', 'wallpaper-input', 'wallpaper-status', 'wallpaper-preview', 'wallpaper-preview-image', 'clear-wallpaper', 'greeting', 'clock', 'date']) ids[id] = new Element();
   ids['weather-details'].hidden = true;
@@ -43,6 +53,7 @@ function setup({ savedCity = null, savedWallpaper = null, savedWeatherCache = nu
   const storage = { weatherCity: savedCity, wallpaperImage: savedWallpaper };
   if (savedWeatherCache) storage.weatherCache = savedWeatherCache;
   if (savedPrayerCache) storage.prayerCache = savedPrayerCache;
+  if (savedTodo) storage.todoItems = savedTodo;
   const chrome = {
     runtime: { lastError: null, getURL: (value) => `chrome-extension://test${value}` },
     topSites: { get: (callback) => callback([{ title: 'Contoh', url: 'https://example.com/' }]) },
@@ -61,6 +72,7 @@ function setup({ savedCity = null, savedWallpaper = null, savedWeatherCache = nu
       getContext: () => ({ fillRect() {}, drawImage() {}, getImageData: () => ({ data: faviconPixels || new Uint8ClampedArray(20 * 20 * 4) }), set fillStyle(value) {} }),
       toDataURL: () => 'data:image/jpeg;base64,YWJj'
     } : new Element(tag),
+    createElementNS: (_, tag) => new Element(tag),
     createDocumentFragment: () => new Element('fragment'),
     querySelectorAll: (selector) => selector === '.prayer-row' ? ids['prayer-list'].children
       : selector === '.prayer-row time' ? ids['prayer-list'].children.map((row) => row.children[1]) : [],
@@ -79,17 +91,99 @@ function setup({ savedCity = null, savedWallpaper = null, savedWeatherCache = nu
     row.append(title, new Element('time'));
     return row;
   }));
+  for (const id of ['todo-widget', 'todo-form', 'todo-input', 'todo-count', 'todo-status', 'todo-list', 'todo-empty', 'widget-prev', 'widget-next', 'widget-position', 'widget-carousel-track']) ids[id] = new Element();
+  const prayerWidget = new Element('section');
+  ids['todo-widget'].inert = true;
+  ids['todo-widget'].setAttribute('aria-hidden', 'true');
+  const originalQuerySelector = document.querySelector;
+  document.querySelector = (selector) => selector === '.prayer-widget' ? prayerWidget : originalQuerySelector(selector);
   class TestDate extends Date {
     constructor(...args) { super(...(args.length ? args : [clock.now])); }
     static now() { return clock.now; }
   }
   vm.runInNewContext(source, { document, window, chrome, location, fetch: fetchImpl, createImageBitmap: bitmapImpl || (async () => ({ width: 1920, height: 1080, close() {} })), URL, URLSearchParams, Intl, Date: TestDate, HTMLElement: Element }, { timeout: 2000 });
-  return { ids, location, storage, window, document, clock };
+  return { ids, location, storage, window, document, clock, prayerWidget };
 }
 
 async function settle() {
   await new Promise((resolve) => setImmediate(resolve));
 }
+
+test('widget carousel only changes slides with manual controls and wraps around', async () => {
+  const { ids, prayerWidget, window } = setup();
+  assert.equal(ids['widget-carousel-track'].classList.contains('is-todo'), false);
+  assert.equal(ids['todo-widget'].inert, true);
+  assert.equal(ids['todo-widget'].attributes['aria-hidden'], 'true');
+  await ids['widget-next'].fire('click');
+  assert.equal(ids['widget-carousel-track'].classList.contains('is-todo'), true);
+  assert.equal(prayerWidget.inert, true);
+  assert.equal(prayerWidget.attributes['aria-hidden'], 'true');
+  assert.equal(ids['todo-widget'].inert, false);
+  assert.equal(ids['todo-widget'].attributes['aria-hidden'], 'false');
+  assert.equal(ids['widget-position'].textContent, '2 / 2 · Todo');
+  for (const tick of window.intervals) tick();
+  assert.equal(ids['widget-carousel-track'].classList.contains('is-todo'), true);
+  await ids['widget-next'].fire('click');
+  assert.equal(ids['widget-carousel-track'].classList.contains('is-todo'), false);
+  assert.equal(prayerWidget.inert, false);
+  assert.equal(prayerWidget.attributes['aria-hidden'], 'false');
+  await ids['widget-prev'].fire('click');
+  assert.equal(ids['widget-carousel-track'].classList.contains('is-todo'), true);
+});
+
+test('todo can be added, edited, completed, deleted, and restored from storage', async () => {
+  const { ids, storage } = setup();
+  ids['todo-input'].value = '  Belajar  ';
+  await ids['todo-form'].fire('submit');
+  await settle();
+  assert.equal(storage.todoItems[0].text, 'Belajar');
+  assert.equal(ids['todo-empty'].hidden, true);
+  const actions = ids['todo-list'].children[0].children;
+  assert.equal(actions[2].attributes['aria-label'], 'Edit Belajar');
+  assert.equal(actions[3].attributes['aria-label'], 'Hapus Belajar');
+  for (const button of [actions[2], actions[3]]) {
+    assert.equal(button.textContent, '');
+    assert.equal(button.children[0].tagName, 'SVG');
+    assert.equal(button.children[0].attributes['aria-hidden'], 'true');
+    assert.equal(button.children[0].children[0].tagName, 'PATH');
+  }
+  assert.notEqual(actions[2].children[0].children[0].attributes.d, actions[3].children[0].children[0].attributes.d);
+  await ids['todo-list'].children[0].children[2].fire('click');
+  const editForm = ids['todo-list'].children[0].children[0];
+  editForm.children[0].value = 'Baca buku';
+  await editForm.fire('submit');
+  await settle();
+  assert.equal(storage.todoItems[0].text, 'Baca buku');
+  const checkbox = ids['todo-list'].children[0].children[0];
+  checkbox.checked = true;
+  await checkbox.fire('change');
+  await settle();
+  assert.equal(storage.todoItems[0].done, true);
+  const restored = setup({ savedTodo: storage.todoItems });
+  assert.equal(restored.ids['todo-list'].children[0].children[1].textContent, 'Baca buku');
+  assert.equal(restored.ids['todo-list'].children[0].children[0].checked, true);
+  await restored.ids['todo-list'].children[0].children[3].fire('click');
+  await settle();
+  assert.equal(restored.storage.todoItems.length, 0);
+  assert.equal(restored.ids['todo-empty'].hidden, false);
+});
+
+test('todo ignores blank entries and invalid saved data without changing storage', async () => {
+  const { ids, storage } = setup({ savedTodo: [{ id: 'a', text: 'valid', done: false }, { id: 'b', text: '', done: true }] });
+  assert.equal(ids['todo-list'].children.length, 1);
+  ids['todo-input'].value = '   ';
+  await ids['todo-form'].fire('submit');
+  await settle();
+  assert.equal(storage.todoItems.length, 2);
+  assert.equal(ids['todo-list'].children.length, 1);
+  await ids['todo-list'].children[0].children[2].fire('click');
+  const edit = ids['todo-list'].children[0].children[0];
+  edit.children[0].value = '  ';
+  await edit.fire('submit');
+  assert.equal(ids['todo-list'].children[0].children[0], edit);
+  await edit.children[2].fire('click');
+  assert.equal(ids['todo-list'].children[0].children[1].textContent, 'valid');
+});
 
 test('home loads tiles and prompts for location when unset; settings remains in same page', () => {
   const { ids, location, window } = setup();

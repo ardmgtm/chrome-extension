@@ -26,6 +26,35 @@ button, input { font: inherit; }
 .hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(320px, .78fr); align-items: center; gap: clamp(24px, 4vw, 64px); flex: 0 0 auto; min-height: 265px; padding: 17px 0 25px; }
 .hero-copy { position: relative; z-index: 1; min-width: 0; }
 .prayer-widget { position: relative; width: 100%; max-width: 480px; justify-self: end; padding: 22px 24px 19px; border: 1px solid rgba(255,255,255,.2); border-radius: 20px; background: linear-gradient(145deg, rgba(255,255,255,.13), rgba(20,15,27,.48)); box-shadow: 0 18px 46px rgba(0,0,0,.2); backdrop-filter: blur(18px); }
+.widget-carousel { width: 100%; max-width: 480px; min-width: 0; justify-self: end; }
+.widget-carousel-viewport { min-width: 0; overflow: hidden; border-radius: 20px; }
+.widget-carousel-track { display: grid; width: 200%; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: stretch; transition: transform 350ms cubic-bezier(.22,.75,.25,1); }
+.widget-carousel-track.is-todo { transform: translateX(-50%); }
+.widget-carousel .prayer-widget, .widget-carousel .todo-widget { max-width: none; min-height: 0; height: 100%; }
+.widget-carousel-controls { display: flex; align-items: center; justify-content: center; gap: 18px; padding: 12px 0 0; color: #eee5f2; font-size: 12px; }
+.widget-carousel-controls button { width: 34px; height: 34px; border: 1px solid rgba(255,255,255,.3); border-radius: 50%; background: rgba(255,255,255,.12); color: #fff; cursor: pointer; }
+.widget-carousel-controls button:hover, .widget-carousel-controls button:focus-visible { background: rgba(255,255,255,.28); outline: 2px solid #c4edff; }
+.todo-widget { width: 100%; min-height: 329px; padding: 22px 24px 19px; border: 1px solid rgba(255,255,255,.2); border-radius: 20px; background: linear-gradient(145deg, rgba(255,255,255,.13), rgba(20,15,27,.48)); box-shadow: 0 18px 46px rgba(0,0,0,.2); backdrop-filter: blur(18px); }
+.todo-heading-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 17px; }
+.todo-heading-row h2 { font-size: clamp(19px,1.8vw,26px); }
+.todo-heading-row span { color: #ddcfdc; font-size: 11px; }
+.todo-form, .todo-edit-form { display: flex; gap: 7px; min-width: 0; }
+.todo-form input, .todo-edit-form input { min-width: 0; flex: 1; padding: 9px 10px; border: 1px solid rgba(255,255,255,.3); border-radius: 9px; background: rgba(0,0,0,.24); color: white; font-size: 12px; }
+.todo-form button, .todo-edit-form button { border: 0; border-radius: 9px; padding: 8px 10px; background: #e9e9ff; color: #25213d; font-size: 11px; font-weight: 700; cursor: pointer; }
+.todo-status { min-height: 16px; margin: 8px 0; color: #f5cbd4; font-size: 11px; }
+.todo-list { display: grid; gap: 6px; max-height: 214px; overflow-y: auto; margin: 0; padding: 0; list-style: none; }
+.todo-item { display: flex; align-items: center; gap: 8px; min-width: 0; padding: 7px 8px; border-radius: 9px; background: rgba(5,11,22,.34); font-size: 12px; }
+.todo-item input[type="checkbox"] { flex: 0 0 auto; accent-color: #9fe7ff; cursor: pointer; }
+.todo-text { min-width: 0; flex: 1; overflow-wrap: anywhere; }
+.todo-item.is-done .todo-text { color: #b8aab9; text-decoration: line-through; }
+.todo-item > .todo-action { display: inline-grid; flex: 0 0 auto; width: 30px; height: 30px; place-items: center; padding: 0; border: 1px solid transparent; border-radius: 8px; background: transparent; color: #c4edff; cursor: pointer; }
+.todo-action svg { width: 17px; height: 17px; }
+.todo-item > .todo-action:hover, .todo-item > .todo-action:focus-visible { border-color: rgba(196,237,255,.35); background: rgba(196,237,255,.14); outline: 2px solid transparent; }
+.todo-item > .todo-action-delete:hover, .todo-item > .todo-action-delete:focus-visible { border-color: rgba(245,203,212,.4); background: rgba(245,203,212,.16); color: #f5cbd4; }
+.todo-edit-form { width: 100%; }
+.todo-empty { color: #ddcfdc; font-size: 12px; }
+.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; }
+@media (prefers-reduced-motion: reduce) { .widget-carousel-track { transition: none; } }
 .prayer-heading-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; margin-bottom: 13px; }
 .prayer-eyebrow { margin: 0 0 5px; color: #a9e8ff; font-size: 9px; font-weight: 750; letter-spacing: .18em; }
 .prayer-heading-row h2 { font-size: clamp(19px, 1.8vw, 26px); }
@@ -157,7 +186,7 @@ h2 { margin: 0; font-size: clamp(23px, 2.15vw, 34px); line-height: 1.2; font-wei
 @keyframes view-in { from { opacity: 0; transform: translateY(10px); filter: blur(3px); } }
 @media (prefers-reduced-motion: reduce) { ::view-transition-old(page-view), ::view-transition-new(page-view) { animation-duration: 1ms; } }
 @media (max-width: 1000px) { .hero { grid-template-columns: minmax(0, 1fr) minmax(280px, .85fr); gap: 22px; } .prayer-widget { padding: 18px; } }
-@media (max-width: 720px) { .hero { grid-template-columns: 1fr; gap: 20px; min-height: 0; padding-top: 38px; } .hero-copy { width: 100%; } .weather-widget { min-height: 185px; } .weather-main { gap: 10px; } .weather-details { flex-wrap: wrap; gap: 7px 18px; } .prayer-widget { max-width: none; justify-self: stretch; } }
+@media (max-width: 720px) { .hero { grid-template-columns: 1fr; gap: 20px; min-height: 0; padding-top: 38px; } .hero-copy { width: 100%; } .weather-widget { min-height: 185px; } .weather-main { gap: 10px; } .weather-details { flex-wrap: wrap; gap: 7px 18px; } .widget-carousel { max-width: none; justify-self: stretch; } .prayer-widget { max-width: none; justify-self: stretch; } }
 @media (max-width: 720px) { .page-tabs { margin-bottom: 20px; } .floating-tab { min-width: 98px; min-height: 42px; } }
 @media (max-width: 430px) { .page-tabs { gap: 2px; padding: 4px; } .floating-tab { min-width: 38px; min-height: 38px; padding: 0 10px; } .floating-tab span { display: none; } }
 @media (max-width: 430px) { .settings-pill span { display: none; } .weather-heading { font-size: 12px; } .weather-condition { font-size: 23px; } .location-controls { flex-direction: column; } }
